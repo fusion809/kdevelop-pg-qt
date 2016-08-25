@@ -1,25 +1,26 @@
 # Maintainer: Andrea Scarpino <andrea@archlinux.org>
 
-pkgname=kdevelop-pg-qt-git
-pkgver=r594.3776ab9
+pkgname=kdevelop-pg-qt
+pkgver=2.0.0
 pkgrel=1
 pkgdesc="KDevelop Parser Generator, a LL(1) parser generator used by KDevelop language plugins. (GIT version)"
 arch=('i686' 'x86_64')
 url='http://www.kdevelop.org'
 license=('GPL')
 depends=('qt5-base')
-conflicts=('kdevelop-pg-qt')
-provides=('kdevelop-pg-qt-git')
 makedepends=('cmake' 'git' 'extra-cmake-modules')
-source=("git://anongit.kde.org/kdevelop-pg-qt.git")
+source=("git://anongit.kde.org/kdevelop-pg-qt.git#tag=v${pkgver}")
 sha1sums=('SKIP')
 
 pkgver() {
-  cd kdevelop-pg-qt
-  printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
+  cd "${srcdir}/${pkgname}"
+  git describe --tags `git rev-list --tags --max-count=1` | sed 's/v//g'
 }
 
 prepare() {
+  if [[ -d build ]]; then
+    rm -rf build
+  fi
   mkdir build
 }
 
